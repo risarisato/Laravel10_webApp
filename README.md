@@ -1,6 +1,7 @@
 ## ③共通のheader作成
 - `resources\views\layouts\app.blade.php`が前ページ共通のレイアウト
-　　- `@include('layouts.announce-header')`を読み込ませる
+　　- `@include('layouts.announce-header')`でログイン状態を読み込ませる
+    - `@include('layouts.global-header')`でロゴを読み込ませる
     - resources\views\layouts\announce-header.blade.phpを作成
     - `<x-app-layout>`の`x`があれば何かしら読み込んでいる
 - 波括弧２つはphp記述になる。route関数にするとpathが変わっても読み込める

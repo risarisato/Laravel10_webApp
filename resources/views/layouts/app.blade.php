@@ -21,6 +21,7 @@
         <div class="min-h-screen bg-gray-100">
             <!-- ここで共通ヘッダーのコンポーネントを読み込み -->
             @include('layouts.announce-header')
+            @include('layouts.global-header')
 
             <!-- resources\views\dashboard.blade.phpの「$header」が読み込まれる -->
             @if (isset($header))
