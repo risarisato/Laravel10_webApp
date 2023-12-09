@@ -1,5 +1,25 @@
 ## ②データベース準備
-- 
+- UUIDのライブラリ(composer)を使いIDインクリメントをuuidにする
+    - `sail composer require goldspecdigital/laravel-eloquent-uuid:^10.0`
+    - 1⃣`sail php artisan make:migration create_categories_table `
+    - 2⃣`sail php artisan make:migration create_recipes_table`
+    - 3⃣`sail php artisan make:migration create_ingredients_table`
+    - 4⃣`sail php artisan make:migration create_steps_table`
+    - 5⃣`sail php artisan make:migration create_reviews_table`
+- constrained()は外部キー制約を設定するメソッド。
+- cascadeは親テーブルのレコードが削除されたら、子テーブルのレコードも削除する。
+- `sail php artisan migrate:rollback`
+- `sail php artisan migrate`
+
+### ダミーデータの作成
+- 1`sail php artisan make:seeder UsersTableSeeder`
+- 2`sail php artisan make:seeder CategoriesTableSeeder`
+- 3`sail php artisan make:seeder RecipesTableSeeder`
+- 4`sail php artisan make:seeder IngredientsTableSeeder'
+- 5`sail php artisan make:seeder StepsTableSeeder'
+- 6`sail php artisan make:seeder ReviewsTableSeeder`
+    - database\seeders\DatabaseSeeder.phpのrun()でダミーデータが実行される
+- 実行`sail php artisan db:seed` 
 
 
 ## ①作業
