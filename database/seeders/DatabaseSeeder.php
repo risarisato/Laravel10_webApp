@@ -8,15 +8,19 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * ここで、各Seederクラスを呼び出す
+     * 各Seederクラスのrun()メソッドが実行される
+     * 順番が大事:外部キー制約があるため、レシピテーブルを先に作成する必要がある
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call([
+            UsersTableSeeder::class,
+            CategoriesTableSeeder::class,
+            RecipesTableSeeder::class,
+            StepsTableSeeder::class,
+            IngredientsTableSeeder::class,
+            ReviewsTableSeeder::class
+        ]);
     }
 }
