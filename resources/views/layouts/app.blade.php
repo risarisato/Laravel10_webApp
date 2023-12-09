@@ -16,12 +16,18 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!-- すべてのCSSを読み込む「public\css\color.css」 -->
+        <link rel="stylesheet" href="css/color.css">
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <!-- すべてのCSSを読み込む「public\css\color.css」を読み込む場所 -->
+    <body class="font-sans antialiased background-color">
+        {{-- <div class="min-h-screen bg-gray-100"> これがダメ--}}
+        <div class="min-h-screen">
+            <!-- ここで共通ヘッダーのコンポーネントを読み込み -->
+            @include('layouts.announce-header') <!-- ログイン状態の読み込み -->
+            @include('layouts.global-header')<!-- logo読み込み -->
 
-            <!-- Page Heading -->
+            <!-- resources\views\dashboard.blade.phpの「$header」が読み込まれる -->
             @if (isset($header))
                 <header class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -30,10 +36,12 @@
                 </header>
             @endif
 
-            <!-- Page Content -->
+            <!-- "あなたはログイン中ですよー！"が表示される箇所 -->
             <main>
                 {{ $slot }}
             </main>
         </div>
+        <!-- 共通フッター表示 -->
+        @include('layouts.footer')
     </body>
 </html>
