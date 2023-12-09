@@ -1,3 +1,13 @@
+## ③共通のheader作成
+- `resources\views\layouts\app.blade.php`が前ページ共通のレイアウト
+　　- `@include('layouts.announce-header')`を読み込ませる
+    - resources\views\layouts\announce-header.blade.phpを作成
+    - `<x-app-layout>`の`x`があれば何かしら読み込んでいる
+- 波括弧２つはphp記述になる。route関数にするとpathが変わっても読み込める
+- `<a href="{{route('profile.edit')}}" class="ml-auto">マイページ</a>`
+- `<a href="http://localhost/profile" class="ml-auto">マイページ</a>`
+
+
 ## ②データベース準備
 - UUIDのライブラリ(composer)を使いIDインクリメントをuuidにする
     - `sail composer require goldspecdigital/laravel-eloquent-uuid:^10.0`
@@ -20,7 +30,7 @@
 - 6`sail php artisan make:seeder ReviewsTableSeeder`
     - database\seeders\DatabaseSeeder.phpのrun()でダミーデータが実行される
 - 実行`sail php artisan db:seed` 
-
+https://dbdiagram.io/d/CookpadLaravel10-6517b108ffbf5169f0c5f3c0
 
 ## ①作業
 - Dockerコマンドで、laravelsail/php81-composer:latestイメージを実行
