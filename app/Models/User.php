@@ -35,8 +35,8 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
-     *
+     * idをuuidに変更した
+     * uuidだとstring型になるので、明示的にキャストを追加した
      * @var array<string, string>
      */
     protected $casts = [

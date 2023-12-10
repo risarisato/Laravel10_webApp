@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+
+
+// 長くなるので、use文を使って短くする
+use App\Http\Controllers\RecipeController;
+use Illuminate\Support\Facades\Route;
+
+
+//Route::get('/', [App\Http\Controllers\RecipeController::class, 'index'])->name('recipes.index');
+Route::get('/', [RecipeController::class, 'home'])->name('home');
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

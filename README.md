@@ -1,3 +1,24 @@
+## ④home画面実装
+- `sail php artisan make:controller RecipeController --resource`ですべてメソッド定義できる
+    - `$recipes`と`$popular`を`Recipesテーブル`から`select`で抽出する
+### RecipeControllerで扱うモデルを作成する
+- `sail php artisan make:model Recipe`
+- `sail php artisan make:model Review`
+- `sail php artisan make:model Category`
+- `sail php artisan make:model Ingredient`
+- `sail php artisan make:model Step`
+
+#### {{ $slot }}でレイアウト継承
+"""
+resources\views\layouts\app.blade.php
+            <main>
+                {{ $slot }}
+            </main>
+<x-app-layout>ここが共通になる</x-app-layout>
+"""
+
+#### コントローラーからモデルを呼び出して、そのモデルが実際にデータを取るっていう方法
+
 ## ③共通のheader作成
 - `resources\views\layouts\app.blade.php`が前ページ共通のレイアウト
     - `@include('layouts.announce-header')`でログイン状態を読み込ませる

@@ -36,8 +36,8 @@
                 </header>
             @endif
 
-            <!-- "あなたはログイン中ですよー！"が表示される箇所 -->
-            <main>
+            <!-- "dashだとあなたはログイン中ですよー！"が表示される箇所 -->
+            <main class="container mx-auto py-8">
                 {{ $slot }}
             </main>
         </div>
