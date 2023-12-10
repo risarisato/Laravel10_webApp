@@ -37,7 +37,7 @@
             @endif
 
             <!-- "dashだとあなたはログイン中ですよー！"が表示される箇所 -->
-            <main class="container mx-auto pt-8">
+            <main class="container mx-auto py-8">
                 {{ $slot }}
             </main>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Recipe; // Recipeモデルを使えるようにする
 
 class RecipeController extends Controller
 {
@@ -16,8 +17,18 @@ class RecipeController extends Controller
             ->limit(3) // 3件だけ取得
             ->get(); // get()は、データを取得するメソッド
         
-        //dd($recipes);40の7分から
-        return view('home');
+        //dd($recipes);
+
+        $popular = Recipe::select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'recipes.views', 'users.name')
+            ->join('users', 'recipes.user_id', '=', 'users.id')
+            ->orderBy('recipes.views', 'desc') // viewの多い順=人気順
+            ->limit(2)
+            ->get();
+
+        //dd($popular);
+
+        // view関数の第2引数にcompact関数を使うと、連想配列のキーと同じ名前の変数をviewに渡せる
+        return view('home', compact('recipes', 'popular'));
     }
 
     /**
