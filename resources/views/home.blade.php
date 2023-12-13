@@ -19,7 +19,7 @@
     <div class="col-span-2 bg-white rounded p-4">
       <h2 class="text-2xl font-bold mb-2">新着レシピ</h2>
       <!-- foreachで配列を回す -->
-      @foreach($recipes as $recipe)
+  @foreach($recipes as $recipe)
       <!-- flexはflexboxを使うという意味 -->
       <a href="" class="flex flex-col items-center bg-white mb-6 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
         <!-- object-coverは画像を縦横比を維持したまま親要素いっぱいに表示する -->
@@ -37,7 +37,7 @@
         </div>
       </a>
   @endforeach
-      <a href="" class="text-gray-600 block text-right">すべてのレシピへ ></a>
+      <a href="{{ route('recipe.index') }}" class="text-gray-600 block text-right">すべてのレシピへ ></a>
     </div>
     <div class="col-span-1 bg-gray ml-4">
       <img src="/images/ad002.jpg" alt="広告002">
