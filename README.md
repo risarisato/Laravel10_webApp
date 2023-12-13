@@ -1,3 +1,6 @@
+## ④レシピ投稿一覧表示ページ作成
+
+
 ## ④home画面実装
 - `sail php artisan make:controller RecipeController --resource`ですべてメソッド定義できる
     - `$recipes`と`$popular`を`Recipesテーブル`から`select`で抽出する

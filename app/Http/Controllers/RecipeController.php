@@ -36,7 +36,13 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        //return view('home');
+        $recipes = Recipe::select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name')
+            ->join('users', 'recipes.user_id', '=', 'users.id') // usersテーブルと結合
+            ->orderBy('recipes.created_at', 'desc') // 作成日時の降順:新しい順
+            ->get(); // get()は、データを取得するメソッド
+        
+        //dd($recipes);
+        return view('recipes.index', compact('recipes'));
     }
 
     /**

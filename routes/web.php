@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 
 //Route::get('/', [App\Http\Controllers\RecipeController::class, 'index'])->name('recipes.index');
 Route::get('/', [RecipeController::class, 'home'])->name('home');
-
+Route::get('/recipe', [RecipeController::class, 'index'])->name('recipe.index');
 
 
 Route::get('/dashboard', function () {
