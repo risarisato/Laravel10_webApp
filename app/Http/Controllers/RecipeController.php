@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recipe; // Recipeモデルを使えるようにする
+use App\Models\Category; // Categoryモデルを使えるようにする
 
 class RecipeController extends Controller
 {
@@ -42,7 +43,12 @@ class RecipeController extends Controller
             ->get(); // get()は、データを取得するメソッド
         
         //dd($recipes);
-        return view('recipes.index', compact('recipes'));
+
+        // カテゴリーテーブルから全てのデータを取得
+        $categories = Category::all();
+
+        // カテゴリーをwithメソッドでviewに渡す
+        return view('recipes.index', compact('recipes', 'categories'));
     }
 
     /**
