@@ -1,13 +1,13 @@
-## ④レシピ投稿一覧表示ページ作成
+## ⑤レシピ投稿一覧表示ページ作成
 - 48:％あいまい検索％
 - 47:カテゴリーテーブルはDBから取得する！コードを増やさくなていい！メリット
-”””
+```
 // カテゴリーテーブルから全てのデータを取得
 $categories = Category::all()
 // カテゴリーをwithメソッドでviewに渡す
 return view('recipes.index', compact('recipes', 'categories'));
-”””
-”””
+```
+```
 @foreach($categories as $category)
     <div>
         <!-- categoryのidを配列でないと受け取れないので、配列にする -->
@@ -15,7 +15,7 @@ return view('recipes.index', compact('recipes', 'categories'));
         <label for="category{{$category['id']}}">{{$category['name']}}</label>
     </div>
 @endforeach
-”””
+```
 ## ④home画面実装
 - `sail php artisan make:controller RecipeController --resource`ですべてメソッド定義できる
     - `$recipes`と`$popular`を`Recipesテーブル`から`select`で抽出する
