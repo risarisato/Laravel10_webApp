@@ -40,8 +40,10 @@ class RecipeController extends Controller
         $filters = $request->all(); // リクエストパラメータを全て取得
         //dd($filters);
 
-        $query = Recipe::query()->select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name')
+        $query = Recipe::query()->select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name', \DB::raw('AVG(reviews.rating) as rating')) // レビューの平均値を取得
             ->join('users', 'recipes.user_id', '=', 'users.id') // usersテーブルと結合
+            ->leftjoin('reviews', 'recipes.id', '=', 'reviews.recipe_id') // レビューテーブルと結合
+            ->groupBy('recipes.id') // レシピIDでグループ化
             ->orderBy('recipes.created_at', 'desc'); // 作成日時の降順:新しい順
 
         if ( !empty($filters) ) {
@@ -51,7 +53,11 @@ class RecipeController extends Controller
                 $query->whereIn('recipes.category_id', $filters['categories']);
             }
 
-        
+            if ( !empty($filters['rating']) ) {
+                // レビューの平均値で絞り込み：指定されたレビューの平均値以上のレシピを取得
+                $query->havingRaw('AVG(reviews.rating) >= ?', [$filters['rating']]);
+            }
+
             if ( !empty($filters['title']) ) {
                 // タイトルで絞り込み：％あいまい検索％
                 $query->where('recipes.title', 'like', '%'.$filters['title'].'%');
@@ -64,7 +70,7 @@ class RecipeController extends Controller
         $categories = Category::all();
 
         // カテゴリーをwithメソッドでviewに渡す
-        return view('recipes.index', compact('recipes', 'categories'));
+        return view('recipes.index', compact('recipes', 'categories', 'filters'));
     }
 
     /**
