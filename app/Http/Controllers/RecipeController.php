@@ -35,13 +35,29 @@ class RecipeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $recipes = Recipe::select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name')
+        $filters = $request->all(); // リクエストパラメータを全て取得
+        //dd($filters);
+
+        $query = Recipe::query()->select('recipes.id', 'recipes.title', 'recipes.description', 'recipes.created_at', 'recipes.image', 'users.name')
             ->join('users', 'recipes.user_id', '=', 'users.id') // usersテーブルと結合
-            ->orderBy('recipes.created_at', 'desc') // 作成日時の降順:新しい順
-            ->get(); // get()は、データを取得するメソッド
+            ->orderBy('recipes.created_at', 'desc'); // 作成日時の降順:新しい順
+
+        if ( !empty($filters) ) {
+            // もし、カテゴリーが選択されていたら
+            if ( !empty($filters['categories']) ) {
+                // カテゴリーで絞り込み選択されたカテゴリーIDが含まれているレシピを取得
+                $query->whereIn('recipes.category_id', $filters['categories']);
+            }
+
         
+            if ( !empty($filters['title']) ) {
+                // タイトルで絞り込み：％あいまい検索％
+                $query->where('recipes.title', 'like', '%'.$filters['title'].'%');
+            }
+        }
+        $recipes = $query->get();        
         //dd($recipes);
 
         // カテゴリーテーブルから全てのデータを取得
