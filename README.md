@@ -1,4 +1,7 @@
 ## ⑤レシピ投稿一覧表示ページ作成
+- 51:パンくずリストは`sail composer require diglactic/laravel-breadcrumbs`からインストールが必要
+    - https://github.com/diglactic/laravel-breadcrumbs
+
 - 48:％あいまい検索％
 - 47:カテゴリーテーブルはDBから取得する！コードを増やさくなていい！メリット
 ```

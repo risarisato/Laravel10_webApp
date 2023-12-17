@@ -63,7 +63,10 @@ class RecipeController extends Controller
                 $query->where('recipes.title', 'like', '%'.$filters['title'].'%');
             }
         }
-        $recipes = $query->get();        
+        //$recipes = $query->get();
+        // ページネーションを使う
+        $recipes = $query->paginate(5); // 1ページに6件表示
+        
         //dd($recipes);
 
         // カテゴリーテーブルから全てのデータを取得
