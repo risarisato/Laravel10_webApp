@@ -97,7 +97,10 @@ class RecipeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $recipe = Recipe::find($id); // レシピIDでレシピを取得
+        $recipe->increment('views'); // 閲覧数を1増やす
+        //dd($recipe);
+        return view('recipes.show', compact('recipe'));
     }
 
     /**

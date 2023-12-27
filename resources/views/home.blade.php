@@ -21,7 +21,7 @@
       <!-- foreachで配列を回す -->
   @foreach($recipes as $recipe)
       <!-- flexはflexboxを使うという意味 -->
-      <a href="" class="flex flex-col items-center bg-white mb-6 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
+      <a href="{{ route('recipe.show',['id' => $recipe['id']]) }}" class="flex flex-col items-center bg-white mb-6 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
         <!-- object-coverは画像を縦横比を維持したまま親要素いっぱいに表示する -->
         <img class="object-cover rounded-t-lg h-40 w-40 mrounded-none rounded-l-lg" src="{{$recipe->image}}" alt="{{$recipe->title}}">
         <!-- flex-growはflexboxの要素を伸ばす -->
@@ -49,13 +49,13 @@
     <h2 class="text-2xl font-bold mb-2">人気レシピ</h2>
       <div class="flex justify-between items-center mb-6">
   @foreach($popular as $populars)
-        <div class="max-12 rounded overflow-hidden shadow-lg mx-4">
+        <a herf="{{ route('recipe.show', ['id' => $recipe['id']]) }}" class="max-12 rounded overflow-hidden shadow-lg mx-4">
           <img class="max-h-44 h-44 w-full object-cover" src="{{$populars->image}}" alt="{{$populars->title}}">
           <div class="px-6 py-4">
-            < class="font-bold text-large mb-2">{{$populars->title}}</p>
-            < class="text-gray-700 text-base">{{$populars->description}}</p>
+            <div class="font-bold text-large mb-2">{{$populars->title}}</div>
+            <p class="text-gray-700 text-base">{{$populars->description}}</p>
           </div>
-        </div>
+        </a>
   @endforeach
       </div>
       <a href="" class="text-gray-600 block text-right">すべての人気レシピへ ></a>

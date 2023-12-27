@@ -1,3 +1,6 @@
+## ⑥レシピ一覧
+- 52:
+
 ## ⑤レシピ投稿一覧表示ページ作成
 - 51:パンくずリストは`sail composer require diglactic/laravel-breadcrumbs`からインストールが必要
     - https://github.com/diglactic/laravel-breadcrumbs
