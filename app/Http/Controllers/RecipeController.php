@@ -97,9 +97,19 @@ class RecipeController extends Controller
      */
     public function show(string $id)
     {
-        $recipe = Recipe::find($id); // レシピIDでレシピを取得
-        $recipe->increment('views'); // 閲覧数を1増やす
+
+        $recipe = Recipe::with(['ingredients', 'steps', 'reviews.user', 'user'])
+            ->where('recipes.id', $id)
+            //->get();
+            ->first(); // 1件だけ取得するので、first()を使う
+            
+        //$recipe = $recipe[0]; // 1件だけ取得するので、配列の0番目を取得これはオブジェクトなので、配列に変換する
+        $recipe_recode = Recipe::find($id); // レシピIDでレシピを取得
+        $recipe_recode->increment('views'); // 閲覧数を1増やす
+        //$ingredients = Ingredient::where('recipe_id', $recipe['id'])->get(); // レシピIDで材料を取得
+        //$steps = Step::where('recipe_id', $recipe['id'])->get(); // レシピIDで手順を取得
         //dd($recipe);
+
         return view('recipes.show', compact('recipe'));
     }
 

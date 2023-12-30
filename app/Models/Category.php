@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    public function recipe()
+    {
+        //カテゴリーから見たら1対多なので、hasMany
+        return $this->hasMany(Recipe::class);
+    }
 }

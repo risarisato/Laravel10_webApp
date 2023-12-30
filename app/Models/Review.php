@@ -10,4 +10,14 @@ class Review extends Model
 {
     use HasFactory;
     use SoftDeletes; // 追加で論理削除を使えるようにする
+
+    public function recipe()
+    {
+        return $this->belongsTo(Recipe::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
