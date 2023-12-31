@@ -1,5 +1,5 @@
 <!-- flexはflexboxを使うという意味 -->
-<a href="" class="flex flex-col items-center bg-white mb-6 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
+<a href="{{ route('recipe.show', ['id' => $recipe['id']]) }}" class="flex flex-col items-center bg-white mb-6 border border-gray-200 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100">
   <!-- object-coverは画像を縦横比を維持したまま親要素いっぱいに表示する -->
   <img class="object-cover rounded-t-lg h-40 w-40 mrounded-none rounded-l-lg" src="{{$recipe->image}}" alt="{{$recipe->title}}">
   <!-- flex-growはflexboxの要素を伸ばす -->
