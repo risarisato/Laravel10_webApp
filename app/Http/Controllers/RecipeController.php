@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Recipe; // Recipeモデルを使えるようにする
 use App\Models\Category; // Categoryモデルを使えるようにする
+use Illuminate\Support\Str; // Strクラスを使えるようにする
+use Illuminate\Support\Facades\Auth; // Authクラスを使えるようにする
+
 
 class RecipeController extends Controller
 {
@@ -81,7 +84,9 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all(); // カテゴリーテーブルから全てのデータを取得
+
+        return view('recipes.create', compact('categories'));
     }
 
     /**
@@ -89,7 +94,17 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $posts = $request->all(); // リクエストパラメータを全て取得
+        //dd($recipe);
+        Recipe::insert([
+            //'id' => \Str::uuid(), // \はuse文を使わずにクラスを呼び出す方法
+            'id' => Str::uuid(), // \はuse文を使わずにクラスを呼び出す方法
+            'title' => $posts['title'],
+            'description' => $posts['description'],
+            'category_id' => $posts['category'],
+            //'user_id' => \Auth::id(), // ログインしているユーザーのIDを取得
+            'user_id' => Auth::id() // \Auth::id()は、use文を使わずにクラスを呼び出す方法
+        ]);
     }
 
     /**
