@@ -1,12 +1,13 @@
 <x-app-layout>
 
-    <form action="{{ route('recipe.store') }}" method="POST" class="w-10/12 p-4 mx-aoto bg-white rounded">  
+    <form action="{{ route('recipe.store') }}" method="POST" class="w-10/12 p-4 mx-aoto bg-white rounded" enctype="multipart/form-data">  
       @csrf
       {{ Breadcrumbs::render('create') }}      
       <div class="grid grid-cols-2 rounded border border-gray-500 mt-4">
         <div class="col-span-1">
           <img class="object-cover w-full aspect-video" src="\images\logo.jpg" alt="recip-image">
-          <input type="file" name="image" class="border border-gray-300 p-2 mb-4 w-full" rounded emctype="multipart/form-data">
+          <!-- ここじゃない！<input type="file" name="image" class="border border-gray-300 p-2 mb-4 w-full" rounded enctype="multipart/form-data"> -->
+          <input type="file" name="image" class="border border-gray-300 p-2 mb-4 w-full rounded">
         </div>
         <div class="col-span-1 p-4">
           <input type="text" name="title" border-gray-300 rounded placeholder="レシピ名" class="border border-gray-300 p-2 mb-4 w-full">

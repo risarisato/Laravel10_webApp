@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Recipe; // Recipeモデルを使えるようにする
 use App\Models\Category; // Categoryモデルを使えるようにする
+use App\Models\Ingredient; // Ingredientモデルを使えるようにする
 use Illuminate\Support\Str; // Strクラスを使えるようにする
 use Illuminate\Support\Facades\Auth; // Authクラスを使えるようにする
+use Illuminate\Support\Facades\Storage; // Storageクラスを使えるようにする
 
 
 class RecipeController extends Controller
@@ -93,11 +95,17 @@ class RecipeController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+    { 
         $posts = $request->all(); // リクエストパラメータを全て取得
         // dd($posts);
+        $image = $request->file('image'); // 画像ファイルを取得
+        //dd($image);
         // s3に画像をアップロード
+        $path = Storage::disk('s3')->putFile('recipe', $image, 'public');
+        // dd($path);
         // s3のURLを取得
+        $url = Storage::disk('s3')->url($path);
+        // dd($url);
         // DBにURLを保存
         //dd($recipe);
         Recipe::insert([
@@ -107,6 +115,7 @@ class RecipeController extends Controller
             'description' => $posts['description'],
             'category_id' => $posts['category'],
             //'user_id' => \Auth::id(), // ログインしているユーザーのIDを取得
+            'image' => $url, // シングルクォーテーションにする！
             'user_id' => Auth::id() // \Auth::id()は、use文を使わずにクラスを呼び出す方法
         ]);
     }

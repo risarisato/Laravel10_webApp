@@ -1,6 +1,6 @@
 ## セッション⑨レシピ投稿機能
 - AWSアカウント作成：s3を使えるようにしておく
-- .envに`AWS_ACCESS_KEY_ID`など値を入力する
+- `.env`に`AWS_ACCESS_KEY_ID`など値を入力する
 - ストレージハザードを使ってS3にアップをする
     - `sail composer require league/flysystem-aws-s3-v3`
 
