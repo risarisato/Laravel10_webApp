@@ -18,6 +18,10 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <!-- すべてのCSSを読み込む「public\css\color.css」 -->
         <link rel="stylesheet" href="/css/color.css">
+        <!-- javascriptを読み込む -->
+        @if( isset($script) )
+            {{ $script }}
+        @endif
     </head>
     <!-- すべてのCSSを読み込む「public\css\color.css」を読み込む場所 -->
     <body class="font-sans antialiased background-color">
