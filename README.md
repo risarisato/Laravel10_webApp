@@ -3,6 +3,7 @@
 - `.env`に`AWS_ACCESS_KEY_ID`など値を入力する
 - ストレージハザードを使ってS3にアップをする
     - `sail composer require league/flysystem-aws-s3-v3`
+- 画面遷移をドラッグ＆ドロップでできるようにJSの`sortable`ライブラリを使用する
 
 ## ⑥レシピ一覧
 - 省略
