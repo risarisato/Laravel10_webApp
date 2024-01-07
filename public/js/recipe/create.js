@@ -48,4 +48,29 @@ window.onload = function() {
         `;
         steps.appendChild(step);
     });
-};
+    // 材料の追加
+    let ingredients = document.getElementById('ingredients');
+    Sortable.create(ingredients, {
+        animation: 150,
+        handle: '.handle',
+        onEnd: function(evt) { // ソート完了時に実行
+            let items = ingredients.querySelectorAll('.ingredient');
+            items.forEach(function(item, index) {
+                item.querySelector('.ingredient-name').name = `ingredients[${index}][name]`;
+                item.querySelector('.ingredient-quantity').name = `ingredients[${index}][quantity]`;
+            });
+        }
+    });
+    // 削除
+    ingredients.addEventListener('click', function(evt) {
+        if (evt.target.classList.contains('ingredient-delete') || evt.target.closest('.ingredient-delete')) {
+            evt.target.closest('.ingredient').remove();
+            // ソート後に手順番号を更新
+            let items = steps.querySelectorAll('.ingredient');
+            items.forEach(function(item, index) {
+                item.querySelector('.ingredient-name').name = `ingredients[${index}][name]`;
+                item.querySelector('.ingredient-quantity').name = `ingredients[${index}][quantity]`;
+            });
+        }
+    });
+};// window.onloadは続いているコメント
