@@ -9,6 +9,7 @@ use App\Models\Ingredient; // Ingredientモデルを使えるようにする
 use Illuminate\Support\Str; // Strクラスを使えるようにする
 use Illuminate\Support\Facades\Auth; // Authクラスを使えるようにする
 use Illuminate\Support\Facades\Storage; // Storageクラスを使えるようにする
+use App\Models\Step; // Stepモデルを使えるようにする
 
 
 class RecipeController extends Controller
@@ -97,7 +98,9 @@ class RecipeController extends Controller
     public function store(Request $request)
     { 
         $posts = $request->all(); // リクエストパラメータを全て取得
-        // dd($posts);
+        //dd($posts['steps']);
+        $uuid = Str::uuid()->tostring(); // UUIDを生成
+        //dd($posts);
         $image = $request->file('image'); // 画像ファイルを取得
         //dd($image);
         // s3に画像をアップロード
@@ -110,7 +113,7 @@ class RecipeController extends Controller
         //dd($recipe);
         Recipe::insert([
             //'id' => \Str::uuid(), // \はuse文を使わずにクラスを呼び出す方法
-            'id' => Str::uuid(), // \はuse文を使わずにクラスを呼び出す方法
+            'id' => $uuid, // \はuse文を使わずにクラスを呼び出す方法
             'title' => $posts['title'],
             'description' => $posts['description'],
             'category_id' => $posts['category'],
@@ -118,6 +121,17 @@ class RecipeController extends Controller
             'image' => $url, // シングルクォーテーションにする！
             'user_id' => Auth::id() // \Auth::id()は、use文を使わずにクラスを呼び出す方法
         ]);
+
+        $steps = []; // 空の配列を作成
+        foreach($posts['steps'] as $key => $step){
+            $steps[$key] = [
+                'recipe_id' => $uuid, // レシピID
+                'step_number' => $key + 1, // 順番
+                'description' => $step // 手順
+            ];
+        }
+        STEP::insert($steps); // 手順を保存
+        dd($steps);
     }
 
     /**
