@@ -5,8 +5,8 @@
     - `sail composer require league/flysystem-aws-s3-v3`
 - 画面遷移をドラッグ＆ドロップでできるようにJSの`sortable`ライブラリを使用する
 - 削除ボタンSVGにstep-deleteを`steps.addEventListener('click', function(evt)`にした
-        - 親要素xmlnsと子要素pathの両方に || が条件にするとクリック反応が良くなった。
-        - `if (evt.target.classList.contains('step-delete') || evt.target.closest('.step-delete')) {`
+    - 親要素xmlnsと子要素pathの両方に || が条件にするとクリック反応が良くなった。
+    - `if (evt.target.classList.contains('step-delete') || evt.target.closest('.step-delete')) {`
 
 ## ⑥レシピ一覧
 - 省略
