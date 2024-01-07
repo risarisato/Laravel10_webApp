@@ -121,7 +121,15 @@ class RecipeController extends Controller
             'image' => $url, // シングルクォーテーションにする！
             'user_id' => Auth::id() // \Auth::id()は、use文を使わずにクラスを呼び出す方法
         ]);
-
+        $ingredients = []; // 空の配列を作成
+        foreach($posts['ingredients'] as $key => $ingredient){
+            $ingredients[$key] = [
+                'recipe_id' => $uuid, // レシピID
+                'name' => $ingredient['name'], // 材料名
+                'quantity' => $ingredient['quantity'] // 分量
+            ];
+        }
+        Ingredient::insert($ingredients); // 材料を保存
         $steps = []; // 空の配列を作成
         foreach($posts['steps'] as $key => $step){
             $steps[$key] = [

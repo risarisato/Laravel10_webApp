@@ -21,7 +21,15 @@
             <option value="{{ $category['id'] }}">{{ $category['name'] }}</option>
           @endforeach
         </select>
-        <div class="flex justify-end">
+        <h4 class="text-bold text-xl mb-4">材料を入力</h4>
+        <div id ="ingredients">
+        @for($i = 0; $i < 3; $i++)
+        <div class="flex">
+          <input type="text" name="ingredients{{$i}}[name]" placeholder="材料名" class="border border-gray-300 p-2 mb-4 w-full rounded">
+          :
+          <input type="text" name="ingredients{{$i}}[quantity]" placeholder="分量" class="border border-gray-300 p-2 mb-4 w-full rounded">
+        </div>
+        @endfor
           <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">レシピを投稿する</button>
         </div>
       </div>
