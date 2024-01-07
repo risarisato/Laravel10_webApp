@@ -8,7 +8,11 @@
     - 親要素xmlnsと子要素pathの両方に || が条件にするとクリック反応が良くなった。
     - `if (evt.target.classList.contains('step-delete') || evt.target.closest('.step-delete')) {`
 - `バックこーテンション`で囲むと、変数が使える！
-    - step.innerHTML = `<p class="step-number w-16">手順${stepCount + 1}</p>`;
+```
+step.innerHTML = `
+        <p class="step-number w-16">手順${stepCount + 1}</p>
+`;
+```
 
 ## ⑥レシピ一覧
 - 省略
