@@ -139,7 +139,7 @@ class RecipeController extends Controller
             ];
         }
         STEP::insert($steps); // 手順を保存
-        dd($steps);
+        //dd($steps);
     }
 
     /**
@@ -152,7 +152,7 @@ class RecipeController extends Controller
             ->where('recipes.id', $id)
             //->get();
             ->first(); // 1件だけ取得するので、first()を使う
-            
+
         //$recipe = $recipe[0]; // 1件だけ取得するので、配列の0番目を取得これはオブジェクトなので、配列に変換する
         $recipe_recode = Recipe::find($id); // レシピIDでレシピを取得
         $recipe_recode->increment('views'); // 閲覧数を1増やす
