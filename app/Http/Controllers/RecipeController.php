@@ -10,6 +10,7 @@ use Illuminate\Support\Str; // Strクラスを使えるようにする
 use Illuminate\Support\Facades\Auth; // Authクラスを使えるようにする
 use Illuminate\Support\Facades\Storage; // Storageクラスを使えるようにする
 use App\Models\Step; // Stepモデルを使えるようにする
+use Illuminate\Support\Facades\DB; // DBクラスを使えるようにする
 
 
 class RecipeController extends Controller
@@ -96,7 +97,7 @@ class RecipeController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    { 
+    {
         $posts = $request->all(); // リクエストパラメータを全て取得
         //dd($posts['steps']);
         $uuid = Str::uuid()->tostring(); // UUIDを生成
@@ -111,37 +112,47 @@ class RecipeController extends Controller
         // dd($url);
         // DBにURLを保存
         //dd($recipe);
-        Recipe::insert([
-            //'id' => \Str::uuid(), // \はuse文を使わずにクラスを呼び出す方法
-            'id' => $uuid, // \はuse文を使わずにクラスを呼び出す方法
-            'title' => $posts['title'],
-            'description' => $posts['description'],
-            'category_id' => $posts['category'],
-            //'user_id' => \Auth::id(), // ログインしているユーザーのIDを取得
-            'image' => $url, // シングルクォーテーションにする！
-            'user_id' => Auth::id() // \Auth::id()は、use文を使わずにクラスを呼び出す方法
-        ]);
-        $ingredients = []; // 空の配列を作成
-        foreach($posts['ingredients'] as $key => $ingredient){
-            $ingredients[$key] = [
-                'recipe_id' => $uuid, // レシピID
-                'name' => $ingredient['name'], // 材料名
-                'quantity' => $ingredient['quantity'] // 分量
-            ];
-        }
-        Ingredient::insert($ingredients); // 材料を保存
-        $steps = []; // 空の配列を作成
-        foreach($posts['steps'] as $key => $step){
-            $steps[$key] = [
-                'recipe_id' => $uuid, // レシピID
-                'step_number' => $key + 1, // 順番
-                'description' => $step // 手順
-            ];
-        }
-        STEP::insert($steps); // 手順を保存
-        //dd($steps);
-    }
 
+        // トランザクション処理(Transaction)を行う
+        try {
+            DB::beginTransaction(); // トランザクション開始
+            Recipe::insert([
+                //'id' => \Str::uuid(), // \はuse文を使わずにクラスを呼び出す方法
+                'id' => $uuid, // \はuse文を使わずにクラスを呼び出す方法
+                'title' => $posts['title'],
+                'description' => $posts['description'],
+                'category_id' => $posts['category'],
+                //'user_id' => \Auth::id(), // ログインしているユーザーのIDを取得
+                'image' => $url, // シングルクォーテーションにする！
+                'user_id' => Auth::id() // \Auth::id()は、use文を使わずにクラスを呼び出す方法
+            ]);
+            $ingredients = []; // 空の配列を作成
+            foreach($posts['ingredients'] as $key => $ingredient){
+                $ingredients[$key] = [
+                    'recipe_id' => $uuid, // レシピID
+                    'name' => $ingredient['name'], // 材料名
+                    'quantity' => $ingredient['quantity'] // 分量
+                ];
+            }
+            Ingredient::insert($ingredients); // 材料を保存
+            $steps = []; // 空の配列を作成
+            foreach($posts['steps'] as $key => $step){
+                $steps[$key] = [
+                    'recipe_id' => $uuid, // レシピID
+                    'step_number' => $key + 1, // 順番
+                    'description' => $step // 手順
+                ];
+            }
+            STEP::insert($steps); // 手順を保存
+            DB::commit(); // トランザクション確定
+        } catch (\Throwable $th) {
+            DB::rollback(); // トランザクション取り消し
+            \Log::debug(print_r($th->getMessage(), true)); // ログにエラーを残す
+            throw $th; // 例外を投げる
+        }
+        //dd($steps);
+        return redirect()->route('recipe.show', ['id' => $uuid]); // レシピ詳細ページにリダイレクト
+    }
     /**
      * Display the specified resource.
      */
