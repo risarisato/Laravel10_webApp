@@ -1,5 +1,20 @@
 // 読み込まれたら実行
 window.onload = function() {
+    // 画像のレビュー表示
+    let preview = document.getElementById('preview');
+    let image = document.getElementById('image');
+    image.addEventListener('change', function(e) {
+        let file = e.target.files[0];
+        if(file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+
     let steps = document.getElementById('steps');
 
     Sortable.create(steps, {

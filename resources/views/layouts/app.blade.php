@@ -30,6 +30,7 @@
             <!-- ここで共通ヘッダーのコンポーネントを読み込み -->
             @include('layouts.announce-header') <!-- ログイン状態の読み込み -->
             @include('layouts.global-header')<!-- logo読み込み -->
+            @include('flash::message')<!-- フラッシュメッセージ読み込み -->
 
             <!-- resources\views\dashboard.blade.phpの「$header」が読み込まれる -->
             @if (isset($header))

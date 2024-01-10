@@ -151,6 +151,7 @@ class RecipeController extends Controller
             throw $th; // 例外を投げる
         }
         //dd($steps);
+        flash()->success('レシピを投稿しました(^^♪'); // フラッシュメッセージを表示
         return redirect()->route('recipe.show', ['id' => $uuid]); // レシピ詳細ページにリダイレクト
     }
     /**

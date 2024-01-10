@@ -13,6 +13,7 @@ step.innerHTML = `
         <p class="step-number w-16">手順${stepCount + 1}</p>
 `;
 ```
+- `sail composer require josegus/laravel-flash`:flashメッセージ
 
 ## ⑥レシピ一覧
 - 省略
