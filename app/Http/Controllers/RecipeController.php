@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth; // Authクラスを使えるようにする
 use Illuminate\Support\Facades\Storage; // Storageクラスを使えるようにする
 use App\Models\Step; // Stepモデルを使えるようにする
 use Illuminate\Support\Facades\DB; // DBクラスを使えるようにする
+use App\Http\Requests\RecipeCreateRequest; // RecipeCreateRequestクラスを使えるようにする
 
 
 class RecipeController extends Controller
@@ -96,7 +97,7 @@ class RecipeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RecipeCreateRequest $request)
     {
         $posts = $request->all(); // リクエストパラメータを全て取得
         //dd($posts['steps']);
