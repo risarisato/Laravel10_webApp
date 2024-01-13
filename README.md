@@ -14,6 +14,11 @@ step.innerHTML = `
 `;
 ```
 - `sail composer require josegus/laravel-flash`:flashメッセージ
+- バリデーション専用のクラスファイルを作ってLaravelバリデーション作成する
+    - `sail php artisan make:request RecipeCreateRequest`
+    - app\Http\Requests\RecipeCreateRequest.phpはvalidationファイル
+- `sail php artisan lang:publish`で日本語化フォルダ
+    - https://github.com/askdkc/breezejp jaとja.jsonをlangファイルでパスを通す
 
 ## ⑥レシピ一覧
 - 省略
