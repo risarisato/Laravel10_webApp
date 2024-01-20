@@ -2,8 +2,8 @@
 - update
     - `put`は１行まるまる更新
     - `patch`は１行の中のタイトルだけとか一部を更新
-    - web.phpのpatchで、view側の編集画面の `@methodが('PATCH')の箇所を探して、updateで更新される
-- AWS_S3に画像があるかないか
+    - web.phpのpatchで、view側の編集画面の @methodが('PATCH')の箇所を探してupdateで更新される
+#### AWS_S3に画像があるかないか判定する
 ```
 // 更新用の空配列を作成
 $update_array = [];
