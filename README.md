@@ -2,6 +2,26 @@
 - update
     - `put`は１行まるまる更新
     - `patch`は１行の中のタイトルだけとか一部を更新
+    - web.phpのpatchで、view側の編集画面の `@methodが('PATCH')の箇所を探して、updateで更新される
+- AWS_S3に画像があるかないか
+```
+// 更新用の空配列を作成
+$update_array = [];
+if ( $request->hasFile('image') ) {
+    // 画像がある場合
+    $image = $request->file('image'); // 画像ファイルを取得
+    //dd($image);
+    // s3に画像をアップロード
+    $path = Storage::disk('s3')->putFile('recipe', $image, 'public');
+    // dd($path);
+    // s3のURLを取得
+    $url = Storage::disk('s3')->url($path);
+    // dd($url);
+    // DBにURLを保存
+    $update_array['image'] = $url;
+}
+Recipe::where('id', $id)->update($update_array); 
+```
 
 ## セッション⑨レシピ投稿機能
 - AWSアカウント作成：s3を使えるようにしておく

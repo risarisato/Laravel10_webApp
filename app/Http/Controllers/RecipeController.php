@@ -199,7 +199,60 @@ class RecipeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $posts = $request->all(); // リクエストパラメータを全て取得
+        //dd($posts);
+        // 更新用の空配列を作成
+        $update_array = [
+            'title' => $posts['title'],
+            'description' => $posts['description'],
+            'category_id' => $posts['category_id']
+        ];
+        // AWS S3に画像有る無しの分岐処理
+        if ( $request->hasFile('image') ) {
+            // 画像がある場合
+            $image = $request->file('image'); // 画像ファイルを取得
+            //dd($image);
+            // s3に画像をアップロード
+            $path = Storage::disk('s3')->putFile('recipe', $image, 'public');
+            // dd($path);
+            // s3のURLを取得
+            $url = Storage::disk('s3')->url($path);
+            // dd($url);
+            // DBにURLを保存
+            $update_array['image'] = $url;
+        }
+        try {
+            DB::beginTransaction(); // トランザクション開始
+            Recipe::where('id', $id)->update($update_array); // $update_arrayでレシピを更新
+            Ingredient::where('recipe_id', $id)->delete(); // 材料を削除
+            STEP::where('recipe_id', $id)->delete(); // 手順を削除
+            $ingredients = []; // 空の配列を作成
+            foreach($posts['ingredients'] as $key => $ingredient){
+                $ingredients[$key] = [
+                    'recipe_id' => $id, // レシピID
+                    'name' => $ingredient['name'], // 材料名
+                    'quantity' => $ingredient['quantity'] // 分量
+                ];
+            }
+            Ingredient::insert($ingredients); // 材料を保存
+            $steps = []; // 空の配列を作成
+            foreach($posts['steps'] as $key => $step){
+                $steps[$key] = [
+                    'recipe_id' => $id, // レシピID
+                    'step_number' => $key + 1, // 順番
+                    'description' => $step // 手順
+                ];
+            }
+            STEP::insert($steps); // 手順を保存
+            DB::commit(); // トランザクション確定
+        } catch (\Throwable $th) {
+            DB::rollback(); // トランザクション取り消し
+            \Log::debug(print_r($th->getMessage(), true)); // ログにエラーを残す
+            throw $th; // 例外を投げる
+        }
+        flash()->success('レシピをトランザクション処理で更新しました(^^♪'); // フラッシュメッセージを表示
+
+        return redirect()->route('recipe.show', ['id' => $id]); // レシピ詳細ページにリダイレクト
     }
 
     /**
