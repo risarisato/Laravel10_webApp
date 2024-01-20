@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage; // Storageクラスを使えるように
 use App\Models\Step; // Stepモデルを使えるようにする
 use Illuminate\Support\Facades\DB; // DBクラスを使えるようにする
 use App\Http\Requests\RecipeCreateRequest; // RecipeCreateRequestクラスを使えるようにする
+use App\Http\Requests\RecipeUpdateRequest; // 編集のバリデーションを適用させる
 
 
 class RecipeController extends Controller
@@ -173,7 +174,13 @@ class RecipeController extends Controller
         //$steps = Step::where('recipe_id', $recipe['id'])->get(); // レシピIDで手順を取得
         //dd($recipe);
 
-        return view('recipes.show', compact('recipe'));
+        // 投稿者とログインユーザーが一致しているかどうかを判定
+        $is_my_recipe = false; // 初期値はfalse
+        if ( Auth::check() && (Auth::id() === $recipe['user_id'] )) {
+            $is_my_recipe = true; // 投稿者とログインユーザーが一致していればtrue
+        }
+
+        return view('recipes.show', compact('recipe', 'is_my_recipe'));
     }
 
     /**
@@ -181,15 +188,78 @@ class RecipeController extends Controller
      */
     public function edit(string $id)
     {
-        //
-    }
+        $recipe = Recipe::with(['ingredients', 'steps', 'reviews.user', 'user'])
+            ->where('recipes.id', $id)
+            ->first()->toArray(); // 1件だけ取得するので、first()を使う
 
+             // 投稿者とログインユーザーが一致しているかどうかを判定
+        if( !Auth::check() || (Auth::id() !== $recipe['user_id']) ) {
+            abort(403); // 403表示：他人の人のレシピのURLにeditでアクセスできないようにする
+            
+        }
+        $categories = Category::all();
+        
+        return view('recipes.edit', compact('recipe', 'categories'));
+    }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RecipeUpdateRequest $request, string $id)
     {
-        //
+        $posts = $request->all(); // リクエストパラメータを全て取得
+        //dd($posts);
+        // 更新用の空配列を作成
+        $update_array = [
+            'title' => $posts['title'],
+            'description' => $posts['description'],
+            'category_id' => $posts['category_id']
+        ];
+        // AWS S3に画像有る無しの分岐処理
+        if ( $request->hasFile('image') ) {
+            // 画像がある場合
+            $image = $request->file('image'); // 画像ファイルを取得
+            //dd($image);
+            // s3に画像をアップロード
+            $path = Storage::disk('s3')->putFile('recipe', $image, 'public');
+            // dd($path);
+            // s3のURLを取得
+            $url = Storage::disk('s3')->url($path);
+            // dd($url);
+            // DBにURLを保存
+            $update_array['image'] = $url;
+        }
+        try {
+            DB::beginTransaction(); // トランザクション開始
+            Recipe::where('id', $id)->update($update_array); // $update_arrayでレシピを更新
+            Ingredient::where('recipe_id', $id)->delete(); // 材料を削除
+            STEP::where('recipe_id', $id)->delete(); // 手順を削除
+            $ingredients = []; // 空の配列を作成
+            foreach($posts['ingredients'] as $key => $ingredient){
+                $ingredients[$key] = [
+                    'recipe_id' => $id, // レシピID
+                    'name' => $ingredient['name'], // 材料名
+                    'quantity' => $ingredient['quantity'] // 分量
+                ];
+            }
+            Ingredient::insert($ingredients); // 材料を保存
+            $steps = []; // 空の配列を作成
+            foreach($posts['steps'] as $key => $step){
+                $steps[$key] = [
+                    'recipe_id' => $id, // レシピID
+                    'step_number' => $key + 1, // 順番
+                    'description' => $step // 手順
+                ];
+            }
+            STEP::insert($steps); // 手順を保存
+            DB::commit(); // トランザクション確定
+        } catch (\Throwable $th) {
+            DB::rollback(); // トランザクション取り消し
+            \Log::debug(print_r($th->getMessage(), true)); // ログにエラーを残す
+            throw $th; // 例外を投げる
+        }
+        flash()->success('レシピをトランザクション処理で更新しました(^^♪'); // フラッシュメッセージを表示
+
+        return redirect()->route('recipe.show', ['id' => $id]); // レシピ詳細ページにリダイレクト
     }
 
     /**

@@ -33,6 +33,8 @@ Route::middleware('auth')->group(function () {
     // ログインしているユーザーのみアクセス可能にする
     Route::get('/recipes/create', [RecipeController::class, 'create'])->name('recipe.create');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/recipes/edit/{id}', [RecipeController::class, 'edit'])->name('recipe.edit');
+    Route::patch('/recipes/update/{id}', [RecipeController::class, 'update'])->name('recipe.update');
     // レシピ投稿機能
     Route::post('/recipes', [RecipeController::class, 'store'])->name('recipe.store');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
