@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage; // Storageクラスを使えるように
 use App\Models\Step; // Stepモデルを使えるようにする
 use Illuminate\Support\Facades\DB; // DBクラスを使えるようにする
 use App\Http\Requests\RecipeCreateRequest; // RecipeCreateRequestクラスを使えるようにする
+use App\Http\Requests\RecipeUpdateRequest; // 編集のバリデーションを適用させる
 
 
 class RecipeController extends Controller
@@ -189,7 +190,13 @@ class RecipeController extends Controller
     {
         $recipe = Recipe::with(['ingredients', 'steps', 'reviews.user', 'user'])
             ->where('recipes.id', $id)
-            ->first();
+            ->first()->toArray(); // 1件だけ取得するので、first()を使う
+
+             // 投稿者とログインユーザーが一致しているかどうかを判定
+        if( !Auth::check() || (Auth::id() !== $recipe['user_id']) ) {
+            abort(403); // 403表示：他人の人のレシピのURLにeditでアクセスできないようにする
+            
+        }
         $categories = Category::all();
         
         return view('recipes.edit', compact('recipe', 'categories'));
@@ -197,7 +204,7 @@ class RecipeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RecipeUpdateRequest $request, string $id)
     {
         $posts = $request->all(); // リクエストパラメータを全て取得
         //dd($posts);
