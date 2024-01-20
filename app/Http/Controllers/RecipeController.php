@@ -262,11 +262,17 @@ class RecipeController extends Controller
         return redirect()->route('recipe.show', ['id' => $id]); // レシピ詳細ページにリダイレクト
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // レシピを削除
     public function destroy(string $id)
     {
-        //
+        
+        Recipe::where('id', $id)->delete();
+        //やっていることは、論理削除と同じ
+        //Recipe::where('recipe_id', $id)->update(['deleted_at' => now()]);
+
+        // フラッシュメッセージを表示
+        flash()->warning('レシピを削除しました。サヨナラ～。。。'); 
+
+        return redirect()->route('recipe.index'); // レシピ一覧ページにリダイレクト
     }
 }

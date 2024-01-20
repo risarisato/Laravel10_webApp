@@ -111,4 +111,13 @@ window.onload = function() {
         `;
         ingredients.appendChild(ingredient);
     });
+
+    // 本当に削除していいのか確認
+    let destory = document.getElementById('delete');
+    destory.addEventListener('click', function(evt) {
+        if (!confirm('論理削除しますか？')) {
+            evt.preventDefault();
+        }
+    });
+
 };// window.onloadは続いているコメント
