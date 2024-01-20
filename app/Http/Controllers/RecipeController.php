@@ -173,7 +173,13 @@ class RecipeController extends Controller
         //$steps = Step::where('recipe_id', $recipe['id'])->get(); // レシピIDで手順を取得
         //dd($recipe);
 
-        return view('recipes.show', compact('recipe'));
+        // 投稿者とログインユーザーが一致しているかどうかを判定
+        $is_my_recipe = false; // 初期値はfalse
+        if ( Auth::check() && (Auth::id() === $recipe['user_id'] )) {
+            $is_my_recipe = true; // 投稿者とログインユーザーが一致していればtrue
+        }
+
+        return view('recipes.show', compact('recipe', 'is_my_recipe'));
     }
 
     /**
@@ -181,9 +187,13 @@ class RecipeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $recipe = Recipe::with(['ingredients', 'steps', 'reviews.user', 'user'])
+            ->where('recipes.id', $id)
+            ->first();
+        $categories = Category::all();
+        
+        return view('recipes.edit', compact('recipe', 'categories'));
     }
-
     /**
      * Update the specified resource in storage.
      */
