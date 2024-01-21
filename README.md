@@ -1,3 +1,9 @@
+## レビュー機能
+- `sail php artisan make:controller ReviewController --resource`:レビュー用のコントローラー作成
+- ログインしてないと投稿できない
+- 自分の投稿にはレビューできない→解除してもおもしろいかも
+- blade表示の`@`は特殊記号なので`&#64;`とやると表示できる
+
 ## 編集機能
 - update
     - `put`は１行まるまる更新

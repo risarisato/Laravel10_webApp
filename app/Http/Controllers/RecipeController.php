@@ -265,7 +265,6 @@ class RecipeController extends Controller
     // レシピを削除
     public function destroy(string $id)
     {
-        
         Recipe::where('id', $id)->delete();
         //やっていることは、論理削除と同じ
         //Recipe::where('recipe_id', $id)->update(['deleted_at' => now()]);
