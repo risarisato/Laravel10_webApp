@@ -9,6 +9,7 @@
     <div class="grid grid-cols-2 rounded border border-gray-500 my-4">
       <div class="col-span-1">
         <img id = "preview" class="object-cover w-full aspect-video" src="/images/logo.jpg" alt="recip-image">
+        <h6 class="text-bold text-xs mb-1">$request->hasFile('image')でStorage::disk('s3')->url($path)になる</h6>
         <!-- ここじゃない！<input type="file" name="image" class="border border-gray-300 p-2 mb-4 w-full" rounded enctype="multipart/form-data"> -->
         <input type="file" id="image" name="image" class="border border-gray-300 p-2 mb-4 w-full rounded">
       </div>
@@ -21,7 +22,8 @@
             <option value="{{ $category['id'] }}" {{ (old('category') ?? null) == $category['id'] ? 'selected' : '' }}>{{ $category['name'] }}</option>
           @endforeach
         </select>
-        <h4 class="text-bold text-xl mb-4">【材料を入力】</h4>
+        <h4 class="text-bold text-xl">【材料を入力】</h4>
+        <h6 class="text-bold text-xs mb-4">sortable.js使用</h6>
         <div id ="ingredients">
     @php
       $old_ingredients = old('ingredients') ?? null;

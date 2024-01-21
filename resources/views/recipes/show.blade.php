@@ -36,9 +36,50 @@
   @if($is_my_recipe)
   <a href="{{ route('recipe.edit', ['id' => $recipe['id']]) }}" class="block w-2/12 p-4 my-4 mx-auto bg-white rounded text-center text-green-500 border border-green-500 hover:bg-green-500 hover:text-white">編集する</a>
   @endif
-  <!-- reviews -->
-  <div class="w-10/12 p-4 mx-auto bg-white rounded">
+  <!-- ログインしないとレビューできない機能 -->
+  @guest
+    <p class="text-center text-gray-500 mt-3">レビューを投稿するには<a href="{{ route('login') }}" class="text-green-500 font-bold text-xl"> 【ログイン】 </a>してください。</p>
+  @endguest
+  @auth
+  @if($is_reviewed)
+    <p class="text-center text-gray-500 mb-4">レビューは投稿済みです。
+      RecipeControllerのis_reviewedをtrueで連続投稿w
+    </p>
+    @elseif($is_my_recipe)
+    <p class="text-center text-gray-500 mb-4">自分のレシピにはレビューできません。<br>
+    show.blade.phpの&#64;elseif($is_my_recipe)を変更で投稿可能ｗ
+    </p>
+    @else
+    <!-- reviewsレビュー機能 -->
+    <div class="w-10/12 p-4 mx-auto bg-white rounded mb-6">
+      <form action="{{ route('review.store', ['id' => $recipe['id']]) }}" method="POST">
+        @csrf
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="rating">
+            評価
+          </label>
+          <select name="rating" id="rating" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded">
+            <option value="1">1点</option>
+            <option value="2">2点</option>
+            <option value="3" selected>3点</option>
+            <option value="4">4点</option>
+            <option value="5">5点</option>
+          </select>
+        </div>
+      <div class="mb-4">
+          <label for="comment" class="sr-only">コメント</label>
+          <textarea name="comment" id="comment" cols="30" rows="10" class="bg-gray-100 border-2 w-full p-4 rounded-lg @error('comment') border-red-500 @enderror" placeholder="コメントを入力してください"></textarea>
+        </div>
+        <div>
+          <button type="submit" class="bg-green-500 text-white px-4 py-3 rounded font-medium w-full">レビューを投稿する</button>
+        </div>
+      </form>
+    </div>
+  @endif
+  @endauth
+    <!-- レビューの表示 -->
     <h4 class="text-2xl font-bold mb-2">レビュー</h4>
+    <h6 class="text-gray-500 mb-4">show.blade.phpの&#64;guestから&#64;endauthを消せば誰でも投稿可能</h6>
     @if( count($recipe['reviews']) === 0 )
       <p>レビューはまだありません。</p>
     @endif

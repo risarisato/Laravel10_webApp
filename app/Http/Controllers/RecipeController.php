@@ -179,8 +179,21 @@ class RecipeController extends Controller
         if ( Auth::check() && (Auth::id() === $recipe['user_id'] )) {
             $is_my_recipe = true; // 投稿者とログインユーザーが一致していればtrue
         }
+        // 投稿できるのは1回まで
+        $is_reviewed = false; // 初期値はfalse
+        if ( Auth::check() ) {
+            $is_reviewed = $recipe->reviews->contains('user_id', Auth::id()); // レビュー済みかどうかを判定
+            
+            // やってることは、下記のコードと同じ
+            // containsメソッドは、コレクションの中に指定した値が含まれているかどうかを判定する
+            //foreach($recipe->reviews as $review) {
+            //    if ( $review->user_id === Auth::id() ) {
+            //        $is_reviewed = true; // レビュー済みならtrue
+            //    }
+            //}
+        }
 
-        return view('recipes.show', compact('recipe', 'is_my_recipe'));
+        return view('recipes.show', compact('recipe', 'is_my_recipe', 'is_reviewed'));
     }
 
     /**
@@ -265,7 +278,6 @@ class RecipeController extends Controller
     // レシピを削除
     public function destroy(string $id)
     {
-        
         Recipe::where('id', $id)->delete();
         //やっていることは、論理削除と同じ
         //Recipe::where('recipe_id', $id)->update(['deleted_at' => now()]);

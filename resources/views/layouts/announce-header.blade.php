@@ -3,7 +3,7 @@
 <section class="flex bg-white shadow h-10 py-2 border-b-2">
   <!-- containerは、横幅のサイズが自動的に良い感じ調整される -->
   <div class="container mx-auto flex justify-between">
-    <p class="">今日も料理が楽しみだ！</p>
+    <p class="">【お料理サイトのクローン】 test@example.com : password</p>
     <div class="flex">
   @auth
       <!-- 波括弧２つはphp記述になる。route関数にするとpathが変わっても読み込める -->
