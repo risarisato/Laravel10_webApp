@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/recipes', [RecipeController::class, 'store'])->name('recipe.store');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
 });
 
 Route::get('/recipes/{id}', [RecipeController::class, 'show'])->name('recipe.show');
