@@ -1,3 +1,6 @@
+## イメージ
+![image](https://github.com/risarisato/Laravel10_webApp/assets/88628553/fb0ab9e9-10e7-4eea-9d96-3f609c483c13)
+
 ## レビュー機能
 - `sail php artisan make:controller ReviewController --resource`:レビュー用のコントローラー作成
 - ログインしてないと投稿できない
